@@ -1,56 +1,41 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
-
-type BoardType = 'dailyRoutinesBoard' | 'projectBoard' | 'customBoard'
-
-//maybe the string will be changed to some type of card
-export type DailyRoutinesColumns = {
-  todo: string[]
-  inProgress: string[]
-  done: string[]
-}
-
-export type ProjectColumns = {
-  backLog: string[]
-  todo: string[]
-  inProgress: string[]
-  done: string[]
-}
-
-export type BoardModel = {
-  name: string
-  type: BoardType
-  columns: DailyRoutinesColumns | ProjectColumns
-  isCompleted: boolean
-  deadline: string
-  color: string
-}
+import { BoardModel, postNewBoard } from './BoardsApi'
 
 type State = {
   boards: BoardModel[]
-  isNewBoardModalOpen: boolean
+  isCreateBoardModalOpen: boolean
   isFilterModalOpen: boolean
 }
 
 const initialState: State = {
   boards: [],
-  isNewBoardModalOpen: false,
+  isCreateBoardModalOpen: false,
   isFilterModalOpen: false,
 }
+
+export const postNewBoardAsync = createAsyncThunk('boards/postNewBoard', async (newBoard: BoardModel, { rejectWithValue }) => {
+  try {
+    const data = await postNewBoard(newBoard)
+    return data
+  } catch (error: unknown) {
+    return rejectWithValue(error)
+  }
+})
 
 const boardsSlice = createSlice({
   name: 'boards',
   initialState,
   reducers: {
-    newBoardModalOpened: (state, action: PayloadAction<boolean>) => {
-      state.isNewBoardModalOpen = action.payload
+    createBoardModalOpened: (state, action: PayloadAction<boolean>) => {
+      state.isCreateBoardModalOpen = action.payload
 
-      console.log(state.isNewBoardModalOpen)
+      console.log(state.isCreateBoardModalOpen)
     },
   },
 })
 
-export const selectNewBoardModalStatus = (state: RootState) => state.boards.isNewBoardModalOpen
+export const selectCreateBoardModalStatus = (state: RootState) => state.boards.isCreateBoardModalOpen
 
-export const { newBoardModalOpened } = boardsSlice.actions
+export const { createBoardModalOpened } = boardsSlice.actions
 export default boardsSlice.reducer

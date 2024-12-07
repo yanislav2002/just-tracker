@@ -1,7 +1,6 @@
 import './Board.css'
 
 import { Flex, Table } from 'antd'
-import { BoardModel } from './BoardsSlice'
 
 const columns = [
   {
