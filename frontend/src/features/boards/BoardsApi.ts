@@ -30,4 +30,6 @@ export const postNewBoard = async (newBoard: BoardModel) => {
   //   })
   //   return response.data
   console.log(newBoard)
+
+  return newBoard
 }

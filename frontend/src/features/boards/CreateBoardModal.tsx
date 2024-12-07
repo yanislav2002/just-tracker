@@ -23,9 +23,7 @@ const CreateBoardModal: React.FC = () => {
     dispatch(createBoardModalOpened(false))
   }
 
-  const onFinish = async (values: FormValues) => {
-    console.log(values)
-
+  const onFinish = (values: FormValues) => {
     const newBoard: BoardModel = {
       name: values.name,
       type: values.type,
@@ -39,7 +37,7 @@ const CreateBoardModal: React.FC = () => {
       color: '',
     }
 
-    await postNewBoardAsync(newBoard)
+    dispatch(postNewBoardAsync(newBoard))
   }
 
   const boardTypes: { value: BoardType; label: string }[] = [
