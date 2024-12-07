@@ -1,8 +1,10 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
 import boardReducer from '../features/boards/BoardsSlice'
+import authReducer from '../features/auth/AuthSlice'
 
 export const store = configureStore({
   reducer: {
+    auth: authReducer,
     boards: boardReducer,
   },
 })
