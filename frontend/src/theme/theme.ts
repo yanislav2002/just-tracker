@@ -19,10 +19,11 @@ export const theme: ThemeConfig = {
     },
     Collapse: {
       headerBg: '#eff1ed',
-      //   colorPrimary: '#2DC653',
-      //   colorPrimaryHover: '#2DC653',
-      //   colorBgContainer: '#4CAF50',
-      //   colorPrimaryActive: '#155D27',
     },
+    Radio: {
+      colorPrimary: '#2DC653',
+      colorPrimaryHover: '#2DC653',
+      colorPrimaryActive: '#2DC653',
+    }
   },
 }

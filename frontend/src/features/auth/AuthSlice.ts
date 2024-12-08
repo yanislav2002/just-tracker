@@ -1,5 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { LoginParams, postLoginParams } from './AuthApi'
+import { RootState } from '../../app/store'
+
+export type AuthMode = 'login' | 'register'
 
 type State = {
   userDetails: {
@@ -7,7 +10,7 @@ type State = {
     username: string | undefined
     password: string | undefined
   }
-  isRadioLogin: boolean
+  authMode: AuthMode
 }
 
 const initialState: State = {
@@ -16,7 +19,7 @@ const initialState: State = {
     username: undefined,
     password: undefined,
   },
-  isRadioLogin: true,
+  authMode: 'login',
 }
 
 export const postLoginParamsAsync = createAsyncThunk('auth/postLoginParams', async (params: LoginParams, {}) => {
@@ -28,11 +31,13 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    radioLoginChanged: (state, action: PayloadAction<boolean>) => {
-      state.isRadioLogin = action.payload
+    radioLoginChanged: (state, action: PayloadAction<AuthMode>) => {
+      state.authMode = action.payload
     },
   },
 })
+
+export const selectAuthDetails = (state: RootState) => state.auth
 
 export const { radioLoginChanged } = authSlice.actions
 export default authSlice.reducer
