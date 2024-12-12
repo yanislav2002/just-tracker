@@ -14,8 +14,32 @@ export type RegisterParams = {
   mail: string
 }
 
-export const postLoginParams = async (params: LoginParams) => {
+export const postLoginRequest = async (params: LoginParams) => {
   const res = await axios.post('/auth/login', params)
-
-  return res.data
+  
+  if (res.status === 200) {
+    return true
+  }
+  
+  return false
 }
+
+export const postRegisterRequest = async (params: RegisterParams) => {
+  const res = await axios.post('/auth/register', params)
+
+  if (res.status === 200) {
+    return true
+  }
+  
+  return false
+}
+
+// export const postLogoutRequest = async () => {
+//   const res = await axios.post('/auth/logout')
+
+//   if (res.status === 200) {
+//     return true
+//   }
+  
+//   return false
+// }

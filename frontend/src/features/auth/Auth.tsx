@@ -1,6 +1,7 @@
 import { Button, Flex, Form, Input, Radio, RadioChangeEvent, Row } from 'antd'
-import { AuthMode, postLoginParamsAsync, radioLoginChanged, selectAuthDetails } from './AuthSlice'
+import { AuthMode, postLoginRequestAsync, postRegisterRequestAsync, radioLoginChanged, selectAuthDetails } from './AuthSlice'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { LoginParams, RegisterParams } from './AuthApi'
 
 
 type FormValues = {
@@ -21,6 +22,22 @@ const setFormInitialValues = (authMode: AuthMode): FormValues => {
   }
 }
 
+const formValuesToLoginParams = (values: FormValues): LoginParams => {
+  return {
+    mail: values.mail,
+    password: values.password
+  }
+}
+
+const formValuesToRegisterParams = (values: FormValues): RegisterParams => {
+  return {
+    mail: values.mail,
+    password: values.password,
+    repeatPassword: values.repeatPassword,
+    username: values.username
+  }
+}
+
 export const Auth: React.FC = () => {
   const dispatch = useAppDispatch()
   
@@ -34,8 +51,10 @@ export const Auth: React.FC = () => {
   }
   
   const onFinish = (values: FormValues) => {
-    dispatch(postLoginParamsAsync(values))
-    
+    isAuthModeLogin
+      ? dispatch(postLoginRequestAsync(formValuesToLoginParams(values)))
+      : dispatch(postRegisterRequestAsync(formValuesToRegisterParams(values)))
+      
     form.resetFields()
   }
   
@@ -130,7 +149,7 @@ export const Auth: React.FC = () => {
               }),
             ]}
           >
-            <Input.Password type='' />
+            <Input.Password />
           </Form.Item>
 
           <Form.Item style={{ display: 'flex', justifyContent: 'end' }}>

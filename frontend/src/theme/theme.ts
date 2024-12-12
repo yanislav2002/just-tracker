@@ -24,6 +24,11 @@ export const theme: ThemeConfig = {
       colorPrimary: '#2DC653',
       colorPrimaryHover: '#2DC653',
       colorPrimaryActive: '#2DC653',
+    },
+    FloatButton: {
+      colorPrimary: '#2DC653',
+      colorPrimaryHover: '#2DC653',
+      colorPrimaryActive: '#2DC653',
     }
   },
 }
