@@ -1,19 +1,24 @@
 export type BoardType = 'dailyRoutinesBoard' | 'projectBoard' | 'customBoard'
 
-//maybe the string will be changed to some type of card
+export type Item = {
+  name: string,
+  type: string
+}
+
 export type DailyRoutinesColumns = {
-  todo: string[]
-  inProgress: string[]
-  done: string[]
+  todo: Item[]
+  inProgress: Item[]
+  done: Item[]
 }
 
 export type ProjectColumns = {
-  backLog: string[]
-  todo: string[]
-  inProgress: string[]
-  done: string[]
+  backLog: Item[]
+  todo: Item[]
+  inProgress: Item[]
+  done: Item[]
 }
 export type BoardModel = {
+  id?: string
   name: string
   type: BoardType
   columns: DailyRoutinesColumns | ProjectColumns
