@@ -2,20 +2,26 @@ import axios from 'axios'
 
 export type BoardType = 'dailyRoutinesBoard' | 'projectBoard' | 'customBoard'
 
-//maybe the string will be changed to some type of card
+export type Item = {
+  name: string,
+  type: string
+}
+
 export type DailyRoutinesColumns = {
-  todo: string[]
-  inProgress: string[]
-  done: string[]
+  todo: Item[]
+  inProgress: Item[]
+  done: Item[]
 }
 
 export type ProjectColumns = {
-  backLog: string[]
-  todo: string[]
-  inProgress: string[]
-  done: string[]
+  backLog: Item[]
+  todo: Item[]
+  inProgress: Item[]
+  done: Item[]
 }
+
 export type BoardModel = {
+  id?: string
   name: string
   type: BoardType
   columns: DailyRoutinesColumns | ProjectColumns
@@ -24,12 +30,28 @@ export type BoardModel = {
   color: string
 }
 
-export const postNewBoard = async (newBoard: BoardModel) => {
-  //   const response = await axios.post(API_URL, data, {
-  //     headers: { 'Content-Type': 'application/json' },
-  //   })
-  //   return response.data
-  console.log(newBoard)
+export const getAllBoards = async (userId: string) => {
+  const res = await axios.post('/boards/getAllBoards', { userId })
 
-  return newBoard
+  if (res.status !== 200) {
+    console.log('error')
+  }
+
+  //todo check type of res.data
+  // console.log(res.data)
+
+  return res.data
+}
+
+export const createBoard = async (newBoard: BoardModel, userId: string) => {
+  const res = await axios.post('/boards/createBoard', { newBoard, userId })
+
+  if (res.status !== 200) {
+    console.log('error')
+  }
+
+  //todo check type of res.data
+  // console.log(res.data)
+
+  return res.data
 }

@@ -18,7 +18,7 @@ const initialState: State = {
   loginStatus: { status: 'idle'},
   registerStatus: { status: 'idle'},
   logoutStatus: { status: 'idle'},
-  userId: undefined,
+  userId: 'root@root.root', //todo undefined
   authMode: 'login',
 }
 

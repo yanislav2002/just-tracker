@@ -1,11 +1,32 @@
 import { Button, Form, Input, Modal, Select, Space } from 'antd'
-import { createBoardModalOpened, postNewBoardAsync, selectCreateBoardModalStatus } from './BoardsSlice'
+import { createBoardAsync, createBoardModalOpened, selectCreateBoardModalStatus } from './BoardsSlice'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { BoardModel, BoardType } from './BoardsApi'
+import { selectAuthDetails } from '../auth/AuthSlice'
 
 type FormValues = {
   name: string
   type: BoardType
+}
+
+const getDefaultColumns = (type: BoardType) => {
+  switch (type) {
+    case 'dailyRoutinesBoard':
+      return {
+        todo: [],
+        inProgress: [],
+        done: []
+      }
+    case 'projectBoard':
+      return {
+        backLog: [],
+        todo: [],
+        inProgress: [],
+        done: []
+      }
+    default:
+      throw new Error(`Unsupported board type: ${type}`)
+  }
 }
 
 const CreateBoardModal: React.FC = () => {
@@ -14,6 +35,7 @@ const CreateBoardModal: React.FC = () => {
   const [form] = Form.useForm<FormValues>()
 
   const isCreateBoardModalOpen = useAppSelector(selectCreateBoardModalStatus)
+  const { userId } = useAppSelector(selectAuthDetails)
 
   const handleOk = () => {
     dispatch(createBoardModalOpened(false))
@@ -27,17 +49,15 @@ const CreateBoardModal: React.FC = () => {
     const newBoard: BoardModel = {
       name: values.name,
       type: values.type,
-      columns: {
-        todo: [],
-        inProgress: [],
-        done: [],
-      },
+      columns: getDefaultColumns(values.type),
       isCompleted: false,
       deadline: '',
       color: '',
     }
 
-    dispatch(postNewBoardAsync(newBoard))
+    if (userId) {
+      dispatch(createBoardAsync({ newBoard, userId }))
+    }
   }
 
   const boardTypes: { value: BoardType; label: string }[] = [
