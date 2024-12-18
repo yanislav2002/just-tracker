@@ -3,11 +3,13 @@ import { RootState } from '../../app/store'
 import { BoardModel, createBoard, getAllBoards } from './BoardsApi'
 import ThunkStatus from '../../util/ThunkStatus'
 
+
 type State = {
   creatingBoard: ThunkStatus
   gettingAllBoards: ThunkStatus
   boards: BoardModel[]
   isCreateBoardModalOpen: boolean
+  isCreateItemModalOpen: boolean
   isFilterModalOpen: boolean
 }
 
@@ -16,7 +18,8 @@ const initialState: State = {
   gettingAllBoards: { status: 'idle' },
   boards: [],
   isCreateBoardModalOpen: false,
-  isFilterModalOpen: false,
+  isCreateItemModalOpen: false,
+  isFilterModalOpen: false
 }
 
 export const createBoardAsync = createAsyncThunk(
@@ -39,6 +42,9 @@ const boardsSlice = createSlice({
   reducers: {
     createBoardModalOpened: (state, action: PayloadAction<boolean>) => {
       state.isCreateBoardModalOpen = action.payload
+    },
+    createItemModalOpened: (state, action: PayloadAction<boolean>) => {
+      state.isCreateItemModalOpen = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -94,7 +100,8 @@ const boardsSlice = createSlice({
 })
 
 export const selectCreateBoardModalStatus = (state: RootState) => state.boards.isCreateBoardModalOpen
+export const selectCreateItemModalStatus = (state: RootState) => state.boards.isCreateItemModalOpen
 export const selectAllBoards = (state: RootState) => state.boards.boards
 
-export const { createBoardModalOpened } = boardsSlice.actions
+export const { createBoardModalOpened, createItemModalOpened } = boardsSlice.actions
 export default boardsSlice.reducer

@@ -2,9 +2,15 @@ import axios from 'axios'
 
 export type BoardType = 'dailyRoutinesBoard' | 'projectBoard' | 'customBoard'
 
+export type ItemType = 'task' | 'other'
+
 export type Item = {
   name: string,
   type: string
+}
+
+export type TaskItem = Item & {
+  description: string
 }
 
 export type DailyRoutinesColumns = {

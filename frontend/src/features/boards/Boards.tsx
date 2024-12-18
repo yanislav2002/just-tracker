@@ -1,12 +1,12 @@
-import { Row, Button, Flex, Collapse } from 'antd'
+import { Row, Button, Flex } from 'antd'
 import { createBoardModalOpened, getAllBoardsAsync, selectAllBoards } from './BoardsSlice'
 import { Board } from '../../components/Board'
 import CreateBoardModal from './CreateBoardModal'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { BoardColumn } from '../../components/BoardColumn'
 import { Item } from '../../components/Item'
 import { useEffect } from 'react'
 import { selectAuthDetails } from '../auth/AuthSlice'
+import { CreateItemModal } from './CreateItemModal'
 
 
 export const Boards: React.FC = () => {
@@ -29,6 +29,7 @@ export const Boards: React.FC = () => {
   return (
     <Row justify='center'>
       <CreateBoardModal />
+      <CreateItemModal />
       <Flex gap='2em' vertical justify='center' style={{ width: '80vw', minWidth: '800px' }}>
         <Flex gap='1em'>
           <Button onClick={onCreateBoardClick} type='primary'>

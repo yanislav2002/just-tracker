@@ -1,35 +1,46 @@
 import { Flex } from "antd"
 import { useDrop } from "react-dnd"
 import { Item } from "../features/boards/BoardsApi"
+import { Item as ItemComponent } from "./Item"
 
 
-export const BoardColumn: React.FC<Item[]> = (itmes) => {
+type BoardColumnProps = {
+  items: Item[]
+  columnWidth: string
+  columnKey: string
+  boardId: string
+}
+
+export const BoardColumn: React.FC<BoardColumnProps> = ({ columnKey, items, columnWidth, boardId }) => {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: 'box',
-    drop: () => ({ name: 'TODO' }),
+    drop: () => ({ name: `${boardId}-${columnKey}` }),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
     }),
   }))
-  
+
   const isActive = canDrop && isOver
-  let backgroundColor = '#222'
+  let backgroundColor = 'white'
   if (isActive) {
-    backgroundColor = 'darkgreen'
+    backgroundColor = '#99EDC3'
   } else if (canDrop) {
     backgroundColor = 'darkkhaki'
   }
 
   return (
-    <Flex justify='end' vertical style={{ border: 'solid black 1px', width: '100%', flexGrow: 1}}>
-      <Flex style={{  height: '2em', width: '100%'}}>
-        //todo name of column]
-        <p>{}</p>
+    <Flex justify='end' vertical style={{ minWidth: '200px', width: columnWidth }}>
+      <Flex align='center' justify='center' style={{ height: '3em', background: '#EFF1ED' }}>
+        <h4>{columnKey}</h4>
       </Flex>
-      <Flex ref={drop} vertical style={{ backgroundColor }}>
-        //todo space for items
-
+      <Flex ref={drop} vertical style={{ backgroundColor, minHeight: '6em' }}>
+        {/* //todo space for items */}
+        <p></p>
+        <ItemComponent></ItemComponent>
+        <ItemComponent></ItemComponent>
+        <ItemComponent></ItemComponent>
+        <ItemComponent></ItemComponent>
       </Flex>
     </Flex>
   )

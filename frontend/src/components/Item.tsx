@@ -1,4 +1,4 @@
-import { Avatar, Card } from "antd"
+import { Card } from "antd"
 import { useDrag } from "react-dnd"
 
 
@@ -24,7 +24,7 @@ export const Item: React.FC = () => {
 
   // const opacity = isDragging ? 0.4 : 1
   return (
-    <Card ref={drag} bordered={false} size={"small"} style={{ margin: '5px' }}>
+    <Card ref={drag} bordered={false} size={"small"} style={{ margin: '5px', border: 'dashed 1px #D9D9D9' }}>
       <Card.Meta
         // avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />}
         title="Task"
