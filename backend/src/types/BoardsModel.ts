@@ -1,8 +1,16 @@
 export type BoardType = 'dailyRoutinesBoard' | 'projectBoard' | 'customBoard'
 
+export type ItemType = 'task' | 'other'
+
 export type Item = {
-  name: string,
+  id?: string
+  boardId: string
+  name: string
   type: string
+}
+
+export type TaskItem = Item & {
+  description: string
 }
 
 export type DailyRoutinesColumns = {

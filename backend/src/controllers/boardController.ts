@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { createBoard, getAllBoards } from "../services/boardService";
+import { createBoard, createItem, deleteBoard, getAllBoards } from "../services/boardService";
 import { BoardModel } from "../types/BoardsModel";
 
 
@@ -46,6 +46,54 @@ router.post('/createBoard', async (req: Request, res: Response) => {
     }
     
     res.status(200).json(createdBoard) //todo return ut like boardModel
+    return 
+  } catch (error: unknown) {
+    console.log(error)
+  }
+})
+
+router.post('/createItem', async (req: Request, res: Response) => {
+  try {
+    const newItem = req.body
+    
+    //todo isboard validation
+    // if (typeof userId != 'string') {
+    //   res.status(400).json({ error: 'Incorrect board params' })
+    //   return  
+    // }
+    
+    const createdItem = await createItem(newItem)
+    
+    // if (!createdBoard) {
+    //   res.status(401).json({ error: 'Problem while creating board' })
+    //   return
+    // }
+    
+    res.status(200).json(createdItem) //todo return ut like boardModel
+    return 
+  } catch (error: unknown) {
+    console.log(error)
+  }
+})
+
+router.post('/deleteBoard', async (req: Request, res: Response) => { //todo fix whole request
+  try {
+    const boardId = req.body
+    
+    //todo isboard validation
+    // if (typeof userId != 'string') {
+    //   res.status(400).json({ error: 'Incorrect board params' })
+    //   return  
+    // }
+    
+    await deleteBoard(boardId)
+    
+    // if (!createdBoard) {
+    //   res.status(401).json({ error: 'Problem while creating board' })
+    //   return
+    // }
+    
+    res.status(200).json(true) //todo return ut like boardModel
     return 
   } catch (error: unknown) {
     console.log(error)

@@ -1,7 +1,7 @@
 import { Button, Form, Input, Modal, Select, Space } from "antd"
-import { ItemType } from "./BoardsApi";
+import { ItemType, TaskItem } from "./BoardsApi";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { createItemModalOpened, selectCreateItemModalStatus } from "./BoardsSlice";
+import { createItemAsync, createItemModalOpened, selectCreateItemModalStatus, selectCurrentBoardId } from "./BoardsSlice";
 
 type FormValues = {
   name: string
@@ -15,29 +15,25 @@ export const CreateItemModal: React.FC = () => {
   const [form] = Form.useForm<FormValues>()
 
   const isCreateItemModalOpen = useAppSelector(selectCreateItemModalStatus)
-  // const { userId } = useAppSelector(selectAuthDetails)
+  const currentBoardId = useAppSelector(selectCurrentBoardId)
 
   const handleOk = () => {
-    dispatch(createItemModalOpened(false))
+    dispatch(createItemModalOpened({ open: false, boardId: undefined }))
   }
 
   const handleCancel = () => {
-    dispatch(createItemModalOpened(false))
+    dispatch(createItemModalOpened({ open: false, boardId: undefined }))
   }
 
   const onFinish = (values: FormValues) => {
-    // const newBoard: BoardModel = {
-    //   name: values.name,
-    //   type: values.type,
-    //   columns: getDefaultColumns(values.type),
-    //   isCompleted: false,
-    //   deadline: '',
-    //   color: '',
-    // }
+    const newItem: TaskItem = { //todo add more type of items
+      boardId: currentBoardId!, //todo remove that stupid !
+      name: values.name,
+      type: values.type,
+      description: values.description
+    }
 
-    // if (userId) {
-    //   dispatch(createBoardAsync({ newBoard, userId }))
-    // }
+    dispatch(createItemAsync(newItem))
   }
 
   const itemTypes: { value: ItemType; label: string }[] = [
@@ -64,7 +60,7 @@ export const CreateItemModal: React.FC = () => {
         </Form.Item>
 
         <Form.Item label='Item Description' name='description'>
-          <Input />
+          <Input.TextArea autoSize={{ minRows: 3 }} />
         </Form.Item>
 
         <Form.Item>

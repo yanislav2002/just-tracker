@@ -4,7 +4,7 @@ import { Button, Collapse, Flex, Space } from 'antd'
 import { BoardColumn } from './BoardColumn'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import { useAppDispatch } from '../app/hooks'
-import { createItemModalOpened } from '../features/boards/BoardsSlice'
+import { createItemModalOpened, deleteBoardAsync } from '../features/boards/BoardsSlice'
 
 
 export const Board: React.FC<BoardModel> = (board: BoardModel) => {
@@ -17,15 +17,17 @@ export const Board: React.FC<BoardModel> = (board: BoardModel) => {
   const onAddTicketClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation()
     
-    dispatch(createItemModalOpened(true))
+    dispatch(createItemModalOpened({open: true, boardId: board.id}))
   }
 
   const onDeleteBoardClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation()
+    
+    dispatch(deleteBoardAsync(board.id!)) //todo remove !
   }
 
   const columns = (
-    <Space style={{ width: '100%', display: 'flex' }}>
+    <Space style={{ width: '100%', display: 'flex', alignItems: 'stretch' }}>
       {Object.entries(board.columns).map(([key, items]) => (
         <BoardColumn items={items} columnWidth={columnWidth} boardId={board.id!} columnKey={key} key={key} /> //todo remove !
       ))}

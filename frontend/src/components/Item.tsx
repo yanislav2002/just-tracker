@@ -1,12 +1,17 @@
 import { Card } from "antd"
 import { useDrag } from "react-dnd"
+import { Item } from "../features/boards/BoardsApi"
 
+
+type itemProps = {
+  itemProps: Item
+}
 
 type DropResult = {
   name: string
 }
 
-export const Item: React.FC = () => {
+export const ItemComponent: React.FC<itemProps> = (itemProps) => {
   const [isDragging, drag] = useDrag(() => ({
     type: 'box',
     item: { name },
@@ -29,7 +34,7 @@ export const Item: React.FC = () => {
         // avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />}
         title="Task"
         description={
-          <p style={{ marginBottom: 0, marginTop: 0 }}>Clean the kitchen</p>
+          <p style={{ marginBottom: 0, marginTop: 0 }}>{itemProps.itemProps.name}</p>
         }
       />
     </Card>

@@ -3,7 +3,6 @@ import { createBoardModalOpened, getAllBoardsAsync, selectAllBoards } from './Bo
 import { Board } from '../../components/Board'
 import CreateBoardModal from './CreateBoardModal'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { Item } from '../../components/Item'
 import { useEffect } from 'react'
 import { selectAuthDetails } from '../auth/AuthSlice'
 import { CreateItemModal } from './CreateItemModal'
@@ -38,12 +37,9 @@ export const Boards: React.FC = () => {
           <Button type='primary'>Filter</Button>
         </Flex>
 
-        {/* <Collapse style={{ padding: 0 }} items={[{ key: '1', label: 'This is default size panel header', children: <Board /> }]} /> */}
         {boards.map((board) => (
           <Board key={board.id} {...board} />
         ))}
-
-        <Item></Item>
       </Flex>
     </Row>
   )

@@ -1,25 +1,31 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
-import { BoardModel, createBoard, getAllBoards } from './BoardsApi'
+import { BoardModel, createBoard, createItem, deleteBoard, getAllBoards, TaskItem } from './BoardsApi'
 import ThunkStatus from '../../util/ThunkStatus'
 
 
 type State = {
   creatingBoard: ThunkStatus
+  creatingItem: ThunkStatus
   gettingAllBoards: ThunkStatus
+  deletingBoard: ThunkStatus
   boards: BoardModel[]
   isCreateBoardModalOpen: boolean
   isCreateItemModalOpen: boolean
   isFilterModalOpen: boolean
+  currentBoardId: string | undefined
 }
 
 const initialState: State = {
   creatingBoard: { status: 'idle' },
   gettingAllBoards: { status: 'idle' },
+  creatingItem: { status: 'idle' },
+  deletingBoard: { status: 'idle' },
   boards: [],
   isCreateBoardModalOpen: false,
   isCreateItemModalOpen: false,
-  isFilterModalOpen: false
+  isFilterModalOpen: false,
+  currentBoardId: undefined
 }
 
 export const createBoardAsync = createAsyncThunk(
@@ -36,6 +42,20 @@ export const getAllBoardsAsync = createAsyncThunk(
   }
 )
 
+export const deleteBoardAsync = createAsyncThunk(
+  'boards/deleteBoard',
+  async (boardId: string) => {
+    return await deleteBoard(boardId)
+  }
+)
+
+export const createItemAsync = createAsyncThunk(
+  'boards/createItem',
+  async (itemParams: TaskItem) => {
+    return await createItem(itemParams)
+  }
+)
+
 const boardsSlice = createSlice({
   name: 'boards',
   initialState,
@@ -43,8 +63,9 @@ const boardsSlice = createSlice({
     createBoardModalOpened: (state, action: PayloadAction<boolean>) => {
       state.isCreateBoardModalOpen = action.payload
     },
-    createItemModalOpened: (state, action: PayloadAction<boolean>) => {
-      state.isCreateItemModalOpen = action.payload
+    createItemModalOpened: (state, action: PayloadAction<{ open: boolean, boardId: string | undefined }>) => {
+      state.isCreateItemModalOpen = action.payload.open
+      state.currentBoardId = action.payload.boardId
     }
   },
   extraReducers: (builder) => {
@@ -89,18 +110,46 @@ const boardsSlice = createSlice({
             color: board.color
           }
         })
-        
+
         state.boards = boards
         state.gettingAllBoards.status = 'succeeded'
       })
       .addCase(getAllBoardsAsync.rejected, (state) => {
         state.gettingAllBoards.status = 'failed'
       })
+
+      .addCase(createItemAsync.pending, (state) => {
+        state.creatingItem.status = 'loading'
+      })
+      .addCase(createItemAsync.fulfilled, (state, action: PayloadAction<TaskItem>) => {
+        console.log(action)
+
+        //todo save the item into the  or load the board again
+        // const currentBoard = state.boards.find(board => board.id = action.payload.boardId)
+        // currentBoard?.columns.todo.push(action.payload)
+
+        state.isCreateItemModalOpen = false
+        state.creatingItem.status = 'succeeded'
+      })
+      .addCase(createItemAsync.rejected, (state) => {
+        state.creatingItem.status = 'failed'
+      })
+      
+      .addCase(deleteBoardAsync.pending, (state) => {
+        state.deletingBoard.status = 'loading'
+      })
+      .addCase(deleteBoardAsync.fulfilled, (state) => {
+        state.deletingBoard.status = 'succeeded'
+      })
+      .addCase(deleteBoardAsync.rejected, (state) => {
+        state.deletingBoard.status = 'failed'
+      })
   },
 })
 
 export const selectCreateBoardModalStatus = (state: RootState) => state.boards.isCreateBoardModalOpen
 export const selectCreateItemModalStatus = (state: RootState) => state.boards.isCreateItemModalOpen
+export const selectCurrentBoardId = (state: RootState) => state.boards.currentBoardId
 export const selectAllBoards = (state: RootState) => state.boards.boards
 
 export const { createBoardModalOpened, createItemModalOpened } = boardsSlice.actions
